@@ -4012,6 +4012,126 @@ def run_parallel_h5_new(tasks, fun, h5_path, n_workers=32, core_only=False):
     end_time = datetime.now()
     print('Duration: {}'.format(end_time - start_time))
 
+def run_serial_h5_new(tasks, fun, h5_path, core_only=False):
+    """
+    Run tasks serially, collect results, and save them into HDF5
+    at the end using `save_all_results_h5`. No duplicates per interval,
+    and safe across multiple runs (appends to file if it exists).
+    """
+
+    results = []
+
+    for ind_fit, task in enumerate(tqdm(tasks, desc="Fitting progress")):
+        try:
+            res = fun(task)
+            results.append(res)
+
+        except Exception as exc:
+            print("Task error:", exc)
+            # Create dummy result with NaNs
+            t_nan = task[1]  # fallback timestamp
+            R_nan = task[-1]  # fallback R_dist
+            if core_only:
+                n_params = 6
+                opt_params_nan = np.full((n_params,), np.nan)
+                in_conds_nan = np.full((n_params,), np.nan)
+                constraints_nan = np.full((n_params,), np.nan)
+                param_names_nan = ['n_c', 'vx_c', 'vy_c', 'vz_c', 'vth_par_c', 'vth_perp_c']
+            else:
+                n_params = 12 
+                opt_params_nan = np.full((n_params,), np.nan)
+                in_conds_nan = np.full((n_params,), np.nan)
+                constraints_nan = np.full((n_params,), np.nan)
+                param_names_nan = [
+                    'n_c', 'vx_c', 'vy_c', 'vz_c', 'vth_par_c', 'vth_perp_c',
+                    'n_b', 'vx_b', 'vy_b', 'vz_b', 'vth_par_b', 'vth_perp_b'
+                ]
+            v_nan = np.full((3), np.nan)
+            B_nan = np.full((3), np.nan)
+            success_nan = np.full((3), True)
+            counts_nan = np.full((3), np.nan)
+
+            dummy_res = (
+                None,                 # ind (unused in save)
+                t_nan,                # timestamp
+                opt_params_nan,       # opt_params
+                param_names_nan,
+                in_conds_nan,         # in_conds
+                constraints_nan,      # constraint_flag
+                np.nan,               # overlap_3d
+                np.nan,               # ks_val
+                np.nan,               # p_val
+                np.nan,               # D_norm
+                np.nan,               # L_mean
+                np.nan,               # L_std
+                R_nan,                # R_dist
+                np.nan,               # n_mom
+                v_nan,                # v_mom
+                np.nan,               # T_par_mom
+                np.nan,               # T_perp_mom
+                B_nan,                # B
+                np.nan,               # qf
+                success_nan,          # success
+                counts_nan            # counts_save
+            )
+            results.append(dummy_res)
+
+    if not results:
+        print("⚠ No results to save.")
+        return
+
+    # Sort results based on timestamp
+    results = sorted(results, key=lambda r: r[1].timestamp())
+
+    # Unpack results into arrays
+    (
+        inds, t_vdfs, opt_params_all, param_names_all, in_conds_all, 
+        constraint_flag_all, overlap_3d_all, ks_val_all, p_val_all, D_norm_all, L_mean_all, L_std_all, R_all, 
+        n_all, v_bulk_bf_all, T_par_all, T_perp_all, B_all, qf_all, success_all, counts_all
+    ) = zip(*results)
+
+    # Convert to numpy arrays for saving
+    times = np.array([t.timestamp() for t in t_vdfs], dtype=np.float64)[:, None]
+    opt_params = np.stack(opt_params_all, axis=0)
+    in_conds = np.stack(in_conds_all, axis=0)
+    constraints = np.stack(constraint_flag_all, axis=0)
+    overlap = np.array(overlap_3d_all)[:, None]
+    ks_metric = np.stack([ks_val_all, p_val_all], axis=1)
+    D_metric = np.stack([D_norm_all, L_mean_all, L_std_all], axis=1)
+    R_dist = np.array(R_all)[:, None]
+    n_mom = np.array(n_all)[:, None]
+    v_mom = np.stack(v_bulk_bf_all, axis=0)
+    T_mom = np.stack([T_par_all, T_perp_all], axis=1)
+    B = np.stack(B_all, axis=0)
+    qf = np.array(qf_all)[:, None]
+    success = np.stack(success_all, axis=0)
+    counts_save = np.stack(counts_all, axis=0)
+
+    start_time = datetime.now()
+
+    # Save all results at once
+    save_all_results_h5(
+        h5_path=h5_path,
+        times=times,
+        opt_params=opt_params,
+        param_names=param_names_all[0],  # assume constant across runs
+        in_conds=in_conds,
+        constraints=constraints,
+        overlap=overlap,
+        ks_metric=ks_metric,
+        D_metric=D_metric,
+        R=R_dist,
+        n_mom=n_mom,     
+        v_mom=v_mom,         
+        T_mom=T_mom,          
+        B=B,
+        qf=qf,
+        success=success,
+        counts_save=counts_save           
+    )
+    end_time = datetime.now()
+    print('Duration: {}'.format(end_time - start_time))
+
 def save_results_h5_single(
     ind_time,                 # datetime object
     opt_params_in,            # array shape (12,)
@@ -4212,7 +4332,7 @@ def fit_data_h5_new(pick_model, t_vdf, vdf_in, vx_bf, vy_bf, vz_bf, counts_in, n
         tasks_in = [(i, t_vdf[i], vx_bf[i], vy_bf[i], vz_bf[i], counts_in[i], vdf_in[i], n[i], v_bulk_bf[i], T_par[i], T_perp[i], T[i], G_factors[i], B_all[i], method[i], nc_init[i], theta_copies[i], vels_copies[i], R_dist[i], qf[i]) for i in range(N)]        
         "********************************************************************"
         
-    run_parallel_h5_new(tasks_in, fit_in, n_workers=n_workers, h5_path=save_path, core_only=core_only)
+    run_serial_h5_new(tasks_in, fit_in, h5_path=save_path, core_only=core_only)
 
 def load_results_h5(filename, start_time=None, end_time=None):
     """

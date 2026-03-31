@@ -24,8 +24,8 @@ def plot_integrated_vdf(ax, vels, core_f, beam_f, data_f, fit_f, errors_f, vc_ma
 
     if core_only == True:
     
-        ax[1].plot(vels, np.log10(core_f), '--', color='teal', label='core', lw=3)
-        ax[1].errorbar(vels, np.log10(data_f), yerr=errors_f/(data_f * np.log(10)), fmt='x', ms=12, mew=4, color='steelblue', label='data')
+        ax[1].plot(vels, np.log10(core_f), '--', color='teal', label='core', lw=2)
+        ax[1].errorbar(vels, np.log10(data_f), yerr=errors_f/(data_f * np.log(10)), fmt='x', ms=5, mew=2, color='steelblue', label='data')
         # ax[1].errorbar(vels, np.log10(data_f), fmt='x', ms=12, mew=4, color='steelblue', label='data')
         ax[1].set_ylim(bottom=-10, top=-6.5)
         ax[1].set_xlabel("V (km/s)")
@@ -34,8 +34,8 @@ def plot_integrated_vdf(ax, vels, core_f, beam_f, data_f, fit_f, errors_f, vc_ma
         ax[1].set_xlim([vc_mag - 200, vc_mag + 300])
         ax[1].set_title(f'Integrated over $\\Theta$ and $\\Phi$ at {t_vdf_ind}')
     
-        ax[0].plot(vels, core_f, '--', color='teal', label='core', lw=3)
-        ax[0].errorbar(vels, data_f, yerr=errors_f, fmt='x', ms=12, mew=4, color='steelblue', label='data')
+        ax[0].plot(vels, core_f, '--', color='teal', label='core', lw=2)
+        ax[0].errorbar(vels, data_f, yerr=errors_f, fmt='x', ms=5, mew=2, color='steelblue', label='data')
         
         ax[0].set_xlabel("V (km/s)")
         ax[0].set_ylabel("VDF")
@@ -44,11 +44,11 @@ def plot_integrated_vdf(ax, vels, core_f, beam_f, data_f, fit_f, errors_f, vc_ma
         ax[0].set_title(f'Integrated over $\\Theta$ and $\\Phi$ at {t_vdf_ind}')
         
     else:
-        ax[1].plot(vels, core_f, '--', color='teal', label='core', lw=3)
-        ax[1].plot(vels, beam_f, '--', color='#CC5500', label='beam', lw=3)
-        ax[1].errorbar(vels, data_f, yerr=errors_f, fmt='x', ms=12, mew=4, color='steelblue', label='data')
+        ax[1].plot(vels, core_f, '--', color='teal', label='core', lw=2)
+        ax[1].plot(vels, beam_f, '--', color='#CC5500', label='beam', lw=2)
+        ax[1].errorbar(vels, data_f, yerr=errors_f, fmt='x', ms=4, mew=2, color='steelblue', label='data')
         # ax[1].errorbar(vels, np.log10(data_f), fmt='x', ms=12, mew=4, color='steelblue', label='data')
-        ax[1].plot(vels, fit_f, color='red', label='fit', lw=3)
+        ax[1].plot(vels, fit_f, color='red', label='fit', lw=2)
         ax[1].set_ylim(bottom=lims[0], top=lims[1])
         ax[1].set_xlabel("V (km/s)")
         ax[1].set_ylabel("VDF")
@@ -57,11 +57,11 @@ def plot_integrated_vdf(ax, vels, core_f, beam_f, data_f, fit_f, errors_f, vc_ma
         ax[1].set_title(f'Integrated over $\\Theta$ and $\\Phi$ at {t_vdf_ind}')
         ax[1].set_yscale('log')
 
-        ax[0].plot(vels, core_f, '--', color='teal', label='core', lw=3)
-        ax[0].plot(vels, beam_f, '--', color='#CC5500', label='beam', lw=3)
-        ax[0].errorbar(vels, data_f, yerr=errors_f, fmt='x', ms=12, mew=4, color='steelblue', label='data')
-        ax[0].plot(vels, fit_f, color='red', label='fit', lw=3)
-        
+        ax[0].plot(vels, core_f, '--', color='teal', label='core', lw=2)
+        ax[0].plot(vels, beam_f, '--', color='#CC5500', label='beam', lw=2)
+        ax[0].errorbar(vels, data_f, yerr=errors_f, fmt='x', ms=4, mew=2, color='steelblue', label='data')
+        ax[0].plot(vels, fit_f, color='red', label='fit', lw=2)
+
         ax[0].set_xlabel("V (km/s)")
         ax[0].set_ylabel("VDF")
         ax[0].legend(loc=1, frameon=False)
