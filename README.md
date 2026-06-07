@@ -7,11 +7,10 @@ A comprehensive Python toolkit for fitting Solar Wind particle velocity distribu
 This project implements advanced statistical methods to extract solar wind plasma parameters by fitting double bi-Maxwellian distribution models to measured velocity distribution function (VDF) data. The toolkit automatically identifies and separates core and beam populations in the proton distribution, accounting for drift characteristics and anisotropic temperatures.
 
 **Key Features:**
-- Poisson likelihood fitting framework with robust error handling
-- Automatic core and beam population identification
-- Three-step hierarchical fitting approach for improved parameter estimation
-- Parallel and perpendicular temperature anisotropy calculations
-- Comprehensive goodness-of-fit metrics
+- Poisson likelihood fitting framework
+- Determination of core and beam proton bulk properties
+- Three-step hierarchical fitting approach
+- Goodness-of-fit metrics
 - Integration with Solar Orbiter PAS/MAG data formats (CDF)
 - Visualization tools for VDF comparison and fit validation
 
