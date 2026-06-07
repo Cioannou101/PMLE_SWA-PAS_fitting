@@ -1,27 +1,131 @@
-# PMLE_SWA-PAS_fitting
-Tools for performing Poisson Maximum Likelihood Estimation (PMLE) fitting on Solar Wind Analyser (SWA) Proton and Alpha Sensor (PAS) data from Solar Orbiter. This notebook fits a double bi-Maxwellian model on PAS Count and VDF data, yielding the bulk parameters of core and beam protons.
+# PMLE-SWA-PAS Fitting
 
-# Getting started
+A comprehensive Python toolkit for fitting Solar Wind particle velocity distribution functions (VDFs) using Poisson Maximum Likelihood Estimation (PMLE). This package analyzes data from the Solar Wind Analyser Proton and Alpha Sensor (SWA-PAS) instrument aboard the ESA Solar Orbiter spacecraft.
 
-The Jupyter notebook Fit_example_simulated.ipynb explains how to apply PMLE fitting on electrostatic analyser VDF data, and shows an example on simulated data.
+## Overview
 
-# Fitting PAS data
+This project implements advanced statistical methods to extract solar wind plasma parameters by fitting double bi-Maxwellian distribution models to measured velocity distribution function (VDF) data. The toolkit automatically identifies and separates core and beam populations in the proton distribution, accounting for drift characteristics and anisotropic temperatures.
 
-## Download data
+**Key Features:**
+- Poisson likelihood fitting framework with robust error handling
+- Automatic core and beam population identification
+- Three-step hierarchical fitting approach for improved parameter estimation
+- Parallel and perpendicular temperature anisotropy calculations
+- Comprehensive goodness-of-fit metrics
+- Integration with Solar Orbiter PAS/MAG data formats (CDF)
+- Visualization tools for VDF comparison and fit validation
 
-Download your data in a "Data" folder in this format: "Data/yyyy_mm_dd/"
-The data files required are: -swa-pas-3d, -swa-pas-vdf, -swa-pas-grnd-mom, -mag_srf
+## Project Status
 
-You can also run the sunpy_soar_download.py, adjusting the time interval and savepath as needed.
+⚠️ **Work in Progress**: This codebase is actively maintained. Further documentation refinements and feature enhancements are ongoing.
 
-## Perform the fit
+📄 **Associated Publication**: A research paper documenting this fitting methodology has been submitted to *The Astrophysical Journal* (ApJ).
 
-The notebook fit_data_notebook.ipynb will load the data, perform the necessary preprocessing and apply the fitting routine, saving the resuls using h5py. The notebook also can load the data and plot the fits against the data at specified timestamps.
+## Quick Start
 
-# Status
+### Prerequisites
 
-⚠️ This project is currently a work in progress and will be further cleaned, documented, and polished in future updates.
+- Python 3.7+
+- NumPy, SciPy, Matplotlib
+- lmfit (for optimization)
+- cdflib (for CDF file I/O)
+- h5py (for HDF5 output)
+- pandas, scikit-learn (for data processing)
 
-If you are interested in using this code, contact charalambos.ioannou.22@ucl.ac.uk.
+### Installation
 
-A research paper using this code has been submitted to The Astrophysical Journal (ApJ).
+1. Clone or download this repository
+2. Install required dependencies:
+```bash
+pip install numpy scipy matplotlib lmfit cdflib h5py pandas scikit-learn tqdm cmocean
+```
+
+3. For data download capabilities, additionally install:
+```bash
+pip install sunpy sunpy-soar
+```
+
+### Basic Usage
+
+#### 1. Learning the Fitting Method
+
+Start with **`Fit_example_simulated.ipynb`** for a complete walkthrough:
+- Demonstrates PMLE fitting on synthetic electrostatic analyzer VDF data
+- Includes simulated data example with expected results
+- Explains concept behind PMLE fitting
+
+#### 2. Fitting Real PAS Data
+
+Use **`fit_data_notebook.ipynb`** to:
+- Load and preprocess Solar Orbiter PAS/MAG data
+- Execute the full fitting pipeline
+- Save results to HDF5 format for post-processing
+- Generate comparison plots between fits and measurements
+
+#### 3. Downloading Data
+
+Data can be obtained via two methods:
+
+**Option A: Manual Download**
+1. Download CDF files from [Solar Orbiter SOAR portal](https://soar.esac.esa.int/)
+2. Organize files in the following structure:
+```
+Data/
+├── 2023_06_01/
+│   ├── solo_L1_swa-pas-3d_20230601_*.cdf
+│   ├── solo_L2_swa-pas-vdf_20230601_*.cdf
+│   ├── solo_L2_swa-pas-grnd-mom_20230601_*.cdf
+│   └── solo_L2_mag-srf-normal_20230601_*.cdf
+└── 2023_06_02/
+    └── ...
+```
+
+**Option B: Automated Download**
+Edit and run `sunpy_soar_download.py`:
+```python
+# Modify date range and save path in the script
+python sunpy_soar_download.py
+```
+
+## Project Structure
+
+```
+├── fit_data_notebook.ipynb          # Main analysis notebook for real data
+├── Fit_example_simulated.ipynb      # Tutorial with simulated data
+├── fit_models.py                    # Core PMLE fitting routines
+├── Poisson_fit_functions.py         # Distribution model definitions
+├── gen_funcs.py                     # Data preprocessing and utilities
+├── load_data_functions.py           # CDF file I/O for PAS/MAG data
+├── gof_funcs.py                     # Goodness-of-fit metrics
+├── plot_funcs.py                    # Visualization utilities
+├── solo_spice.py                    # Spacecraft position/orientation tools
+├── sunpy_soar_download.py           # Automated data download
+├── Data/                            # Input CDF data directory
+├── solo_spice/                      # SPICE kernels for orbit calculations
+├── test_result1/                    # Example output directory
+└── README.md                        # This file
+```
+
+## Typical Workflow
+
+1. **Prepare Data**: Place CDF files in `Data/yyyy_mm_dd/` directories or use `sunpy_soar_download.py`
+2. **Configure**: Edit `fit_data_notebook.ipynb` with your date range and parameters
+3. **Run Fitting**: Execute the notebook to fit VDF data across all timestamps
+4. **Inspect Results**: Review generated plots and HDF5 output files
+5. **Post-Process**: Use output data for further analysis
+
+## Output Format
+
+Results are saved as HDF5 files containing:
+- Fitted parameters (density, bulk velocity, temperatures, drift velocity)
+- Goodness-of-fit metrics
+- Timestamps and metadata
+
+## Support & Contributing
+
+For questions or issues using this code, please contact:
+- **Author**: Charalambos Ioannou
+- **Institution**: UCL / Mullard Space Science Laboratory
+- **Email**: charalambos.ioannou.22@ucl.ac.uk
+- **GitHub**: [@Cioannou101](https://github.com/Cioannou101)
+
