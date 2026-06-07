@@ -39,8 +39,8 @@ def days_between(start_date: str, end_date: str):
 
 def main():
     """Main execution function."""
-    time_start = "2023-05-05"
-    time_end = "2023-05-05"
+    time_start = "2023-06-01"
+    time_end = "2023-06-01"
 
     days_in_between = days_between(time_start, time_end)
 

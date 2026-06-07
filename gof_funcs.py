@@ -1,10 +1,19 @@
 
-from importlib import reload
+"""
+Author: Charalambos Ioannou
+Institution: UCL / MSSL
+Email: charalambos.ioannou.22@ucl.ac.uk
+GitHub: @Cioannou101
+Created: 2026-06-07
+
+This script contains functions used in determing various goodness-of-fit statistics for the Poisson fits to the VDF data, including the KS test and deviance.
+"""
+
 import numpy as np
 from scipy.stats import poisson, kstest
 
-from Poisson_fit_functions_2 import *
-from gen_funcs_2 import *
+from Poisson_fit_functions import *
+from gen_funcs import *
 
 def model_lambda_params(params, design):
     """
