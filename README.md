@@ -95,14 +95,13 @@ python sunpy_soar_download.py
 ├── fit_models.py                    # Core PMLE fitting routines
 ├── Poisson_fit_functions.py         # Distribution model definitions
 ├── gen_funcs.py                     # Data preprocessing and utilities
-├── load_data_functions.py           # CDF file I/O for PAS/MAG data
+├── load_data_functions.py           # CDF file processing for PAS/MAG data
 ├── gof_funcs.py                     # Goodness-of-fit metrics
 ├── plot_funcs.py                    # Visualization utilities
 ├── solo_spice.py                    # Spacecraft position/orientation tools
 ├── sunpy_soar_download.py           # Automated data download
 ├── Data/                            # Input CDF data directory
 ├── solo_spice/                      # SPICE kernels for orbit calculations
-├── test_result1/                    # Example output directory
 └── README.md                        # This file
 ```
 
