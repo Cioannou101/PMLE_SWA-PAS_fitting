@@ -119,6 +119,16 @@ Results are saved as HDF5 files containing:
 - Goodness-of-fit metrics
 - Timestamps and metadata
 
+## Citation
+
+If you use this software, please cite the Zenodo software release associated with the publication.
+
+The DOI for the archived release will be available through Zenodo.
+
+## Version
+
+Current release: v1.0.1
+
 ## Support & Contributing
 
 For questions or issues using this code, please contact:
