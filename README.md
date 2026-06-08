@@ -16,9 +16,9 @@ This project implements advanced statistical methods to extract solar wind plasm
 
 ## Project Status
 
-⚠️ **Work in Progress**: This codebase is actively maintained. Further documentation refinements and feature enhancements are ongoing.
+This repository contains the reference implementation associated with the accompanying Astrophysical Journal manuscript.
 
-📄 **Associated Publication**: A research paper documenting this fitting methodology has been submitted to *The Astrophysical Journal* (ApJ).
+The software is actively maintained and future releases may introduce additional features and documentation improvements.
 
 ## Quick Start
 
