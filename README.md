@@ -127,3 +127,7 @@ For questions or issues using this code, please contact:
 - **Email**: charalambos.ioannou.22@ucl.ac.uk
 - **GitHub**: [@Cioannou101](https://github.com/Cioannou101)
 
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
